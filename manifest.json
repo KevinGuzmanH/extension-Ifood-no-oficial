@@ -1,0 +1,31 @@
+{
+    "name": "Ifood Viewer",
+    "version": "1.0",
+    "manifest_version": 2,
+    "description": "Extensión que te permite ver los restaurantes mas baratos y mas caros en promedio en Ifood",
+    "content_scripts": [
+        {
+            "matches": [
+                "https://www.ifood.com.co/lista-restaurantes"
+            ],
+            "js": [
+                "content-script.js"
+            ]
+        }
+    ],
+    "icons": {
+        "128": "icon128.png",
+        "48": "icon48.png",
+        "16": "icon16.png"
+    },
+    "permissions": [
+        "activeTab",
+        "storage"
+    ],
+    "short_name": "NombreCorto2",
+    "author": "Damian Sire",
+    "browser_action": {
+        "default_popup": "index.html",
+        "default_title": "Texto que se muestra al apoyar el mouse sobre el icono"
+    }
+}
