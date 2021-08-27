@@ -1,12 +1,25 @@
-setTimeout(() => {
+  var positionget;
+
+  let success = (positions) => {
+    positionget = positions;
+    start();
+  }
+  let error = (error) => {
+    alert('Para que la extensión funcione tienes que activar la localización y recargar la página')
+  }
+
+  navigator.geolocation.getCurrentPosition(success,error);
+
+  function start(){
+  setTimeout(() => {
   
-  console.clear();
-  console.log("working1");
-
-
   async function getAllData() {
+    
+    let latitude = positionget.coords.latitude;
+    let longitude = positionget.coords.longitude;
+
     let url =
-      `https://marketplace.ifood.com.br/v2/merchants?latitude=6.25000626&longitude=-75.56267685&page=0&channel=COMEYA&size=55&features=&categories=&payment_types=&delivery_fee_from=0&delivery_fee_to=10000&delivery_time_from=0&delivery_time_to=240`;
+      `https://marketplace.ifood.com.br/v2/merchants?latitude=${latitude}&longitude=${longitude}&page=0&channel=COMEYA&size=55&features=&categories=&payment_types=&delivery_fee_from=0&delivery_fee_to=10000&delivery_time_from=0&delivery_time_to=240`;
 
     let headers = {
       "sec-ch-ua-mobile": "?0",
@@ -45,7 +58,6 @@ setTimeout(() => {
     }
 
     restaurantData.sort((a, b) => (a.avgPrice > b.avgPrice ? 1 : -1));
-    console.log(restaurantData);
     return restaurantData.slice(1,16);
   }
 
@@ -105,13 +117,7 @@ setTimeout(() => {
     return response.json();
   }
 
-  let buttonsContainer = document.querySelector("#__next > div > header > div");
-  let newBtn = `<a class="btn btn--link btn--size-m btn--iconize responsive-header__button" role="button" 
-              aria-label="Promociones" tabindex="0" style="width: unset;">probando</a>`;
-
-  buttonsContainer.insertAdjacentHTML("afterBegin", newBtn);
-
-  let title = `<div class="restaurants-list__header"><h2 class="title" tabindex="0">Restaurantes con mejores precios en promedio - Analizados 300 Restaurantes</h2></div>`;
+  let title = `<div class="restaurants-list__header"><h2 class="title" tabindex="0">Restaurantes con mejores precios en promedio - Analizados 55 Restaurantes</h2></div>`;
 
   let parentSection = document.querySelector("#__next > div > main > div > div.discoveries-container");
 
@@ -122,29 +128,34 @@ setTimeout(() => {
   restaurantslist.insertAdjacentHTML('beforebegin',title);
 
         function put(restaurant) {
-
+          
+          let finalRating;
+          let restaurantAvgPrice = restaurant.avgPrice.toFixed(0);
+          if(restaurant.userRating.toFixed(1) == 0.0){
+            finalRating = 'Nuevo';
+          }else{
+            finalRating = restaurant.userRating.toFixed(1)
+          }
           let item = `<li class="restaurants-list__item-wrapper"><a class="restaurant-card__link" tabindex="0" data-test-id="restaurant-item-link" 
           href="/delivery/${restaurant.slug}/${restaurant.id}"><div class="restaurant-card">
           <div class="restaurant-card__figure"><img loading="lazy" src="https://static-images.ifood.com.br/image/upload/t_thumbnail/logosgde/${restaurant.resources[0].fileName}" 
           alt="${restaurant.name}" class="restaurant-card__img-logo" crossorigin="anonymous"></div><h3 class="restaurant-card__title"><div class="restaurant-card__header">
           <span style="color: #3e3e3e;font-size: 0.875rem;line-height: 0.875rem;font-weight: 500;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: block; height: 18px;" class="${restaurant.name}">${restaurant.name}</span></div><div class="restaurant-card__info">
-          <span aria-label="Evaluación: ${restaurant.userRating.toFixed(1)}" tabindex="0" class="restaurant-rating" data-test-id="restaurant-rating__evaluation">
+          <span aria-label="Evaluación: ${finalRating}" tabindex="0" class="restaurant-rating" data-test-id="restaurant-rating__evaluation">
           <span class="icon-marmita icon-marmita--star"><svg width="10" height="10" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
           <path d="M5.483.314l1.128 2.39a.54.54 0 0 0 .405.308l2.522.383c.442.067.618.635.299.96l-1.825 1.86a.58.58 0 0 0-.155.499l.43 2.626c.076.46-.386.811-.78.594L5.25 
           8.694a.518.518 0 0 0-.502 0l-2.255 1.24c-.395.217-.857-.134-.782-.594l.431-2.626a.58.58 0 0 0-.155-.499L.163 4.355c-.32-.326-.143-.893.299-.96l2.522-.383a.54.54 0 0 0 
-          .405-.308L4.517.314a.528.528 0 0 1 .966 0z"></path></svg></span>${restaurant.userRating.toFixed(1)}</span><span class="restaurant-card__separator"> • </span>${restaurant.mainCategory.name}<span class="restaurant-card__separator">
+          .405-.308L4.517.314a.528.528 0 0 1 .966 0z"></path></svg></span>${finalRating}</span><span class="restaurant-card__separator"> • </span>${restaurant.mainCategory.name}<span class="restaurant-card__separator">
            • </span>${restaurant.distance} km</div></h3><div class="restaurant-card__footer"><div class="restaurant-card__mini-tag default">${restaurant.deliveryTime}-${restaurant.deliveryTime+10} min</div><span class="restaurant-card__separator">
-            • </span><div class="restaurant-card__mini-tag nowrap">Envío $ ${restaurant.deliveryFee.value}</div></div></div></a></li>`;
+            • </span><div class="restaurant-card__mini-tag nowrap">Envío $ ${restaurant.deliveryFee.value}</div><div style="position: absolute;margin-top: 30px;">Tiempo de Preparación ${restaurant.preparationTime} min</div><div style="position: absolute;margin-top: -30px;">Precio Promedio ${restaurantAvgPrice}</div></div></div></a></li>`;
 
           let newSection = document.querySelector('#newSection');
-          newSection.insertAdjacentHTML('beforeEnd',item)
+          newSection.insertAdjacentHTML('beforeEnd',item)      
         }
 
         getAllData().then(
           restaurant => {restaurant.forEach(r => put(r))} 
         )
           
-        
-        
-    
   }, 10000);
+}

@@ -2,7 +2,7 @@
     "name": "Ifood Viewer",
     "version": "1.0",
     "manifest_version": 2,
-    "description": "Extensión que te permite ver los restaurantes mas baratos y mas caros en promedio en Ifood",
+    "description": "Extensión que te permite ver los restaurantes mas baratos en promedio en Ifood Colombia",
     "content_scripts": [
         {
             "matches": [
@@ -22,10 +22,10 @@
         "activeTab",
         "storage"
     ],
-    "short_name": "NombreCorto2",
-    "author": "Damian Sire",
+    "short_name": "Kevin Yorney",
+    "author": "Kevin Yorney Guzmán",
     "browser_action": {
         "default_popup": "index.html",
-        "default_title": "Texto que se muestra al apoyar el mouse sobre el icono"
+        "default_title": "Asegurece de aceptar la localizacion en la página de Ifood"
     }
 }
