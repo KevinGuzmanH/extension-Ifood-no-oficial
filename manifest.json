@@ -20,12 +20,13 @@
     },
     "permissions": [
         "activeTab",
-        "storage"
+        "geolocation",
+        "*//wslatam.ifood.com.br/*",
+        "*//marketplace.ifood.com.br/*"
     ],
     "short_name": "Kevin Yorney",
     "author": "Kevin Yorney Guzmán",
     "browser_action": {
-        "default_popup": "index.html",
-        "default_title": "Asegurece de aceptar la localizacion en la página de Ifood"
+        "default_title": "Ifood Viewer"
     }
 }
